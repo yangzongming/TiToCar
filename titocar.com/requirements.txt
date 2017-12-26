@@ -1,0 +1,4 @@
+easy_install bottle
+easy_install gevent
+easy_install jinja2
+easy_install mysql-connector-python
