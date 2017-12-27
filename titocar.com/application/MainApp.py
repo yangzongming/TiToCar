@@ -26,7 +26,7 @@ def load_action_module():
     """
     加载项目
     """
-    action_modules = ['user']
+    action_modules = ['user','manager']
     action_base = 'application.actions'
     from importlib import import_module
     for fi_actionmodule in action_modules:
@@ -37,6 +37,7 @@ def load_action_module():
                 import_module(fi_actionmodule[1:])
             else:
                 import_module('%s.%s' % (action_base,fi_actionmodule))
+                print(fi_actionmodule)
         except Exception, ex:
             print 'load module error'
 
