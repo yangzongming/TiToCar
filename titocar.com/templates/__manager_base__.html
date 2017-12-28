@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    {% block meta %}<!-- block meta  -->{% endblock %}
+    <title>{% block title %} ? {% endblock %} - 车天通</title>
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="/static/css/uikit.min.css">
+    <link rel="stylesheet" href="/static/css/uikit.gradient.min.css">
+    <link rel="stylesheet" href="/static/css/awesome.css" />
+    <link rel="stylesheet" href="/static/css/style.css" media="screen" type="text/css" />
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/md5.js"></script>
+    <script src="/static/js/uikit.min.js"></script>
+    <script src="/static/js/sticky.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/index.js"></script>
+    <script src="/static/js/awesome.js"></script>
+    {% block beforehead %}<!-- before head  -->{% endblock %}
+</head>
+<body>
+    <div class='nav'>
+    <ul>
+    <li><a href='#'>首页</a></li>
+    <li><a href='#'>管理用户</a>
+    <ul>
+      <li><a href='#'>查看所有用户</a></li>
+      <li><a href='#'>增加用户</a></li>
+      <li><a href='#'>添加管理员</a></li>
+      </ul>
+    </li>
+    <li><a href='#'>车型</a>
+        <ul>
+      <li><a href='#'>添加车型</a></li>
+      <li><a href='#'>添加颜色</a></li>
+      <li><a href='#'>新能源</a></li>
+      <li><a href='#'>充电桩</a></li>
+      </ul>
+    </li>
+    <li><a href='#'>关于我们</a></li>
+    <li><a href='#'>联系我们</a></li>
+    <li class='lamp'><span></span></li>
+    </ul>
+    </div>
+</body>
+</html>
