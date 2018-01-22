@@ -7,7 +7,10 @@ from application.transwarp import db
 from application.config import configs
 from application.transwarp.web import WSGIApplication, Jinja2TemplateEngine
 import os
+import sys
 
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 @get('/index')
 def index():
@@ -26,7 +29,7 @@ def load_action_module():
     """
     加载项目
     """
-    action_modules = ['user','manager']
+    action_modules = ['user','manager','insurance','carmall']
     action_base = 'application.actions'
     from importlib import import_module
     for fi_actionmodule in action_modules:

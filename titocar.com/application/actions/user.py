@@ -8,7 +8,8 @@ from bottle import jinja2_view,route
 from application.viewmodel.user import User, Blog, Comment
 import functools
 from application.apis import api, Page, APIError, APIValueError, APIPermissionError, APIResourceNotFoundError
-from application.config import configs
+from application.actions import _COOKIE_NAME,_COOKIE_KEY,parse_signed_cookie
+
 
 view = functools.partial(jinja2_view, template_lookup=['templates'])
 
@@ -16,8 +17,7 @@ view = functools.partial(jinja2_view, template_lookup=['templates'])
 _RE_EMAIL = re.compile(r'^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$')
 _RE_MD5 = re.compile(r'^[0-9a-f]{32}$')
 
-_COOKIE_NAME = 'titocarsession'
-_COOKIE_KEY = configs.session.secret
+
 
 @get('/signin')
 @view('signin.html')
@@ -38,9 +38,14 @@ def dosignin():
     # make session cookie:
     max_age = 604800 if remember=='true' else None
     cookie = make_signed_cookie(user.id, user.password, max_age)
-    response.set_cookie(_COOKIE_NAME, cookie, max_age=max_age)
+    response.set_cookie(_COOKIE_NAME, cookie, _COOKIE_KEY,max_age=max_age,path='/')
     user.password = '******'
     return user
+
+@get('/signout')
+def signout():
+    #response.delete_cookie(_COOKIE_NAME)
+    return None
 
 @get('/register')
 @view('register.html')
@@ -66,7 +71,6 @@ def register_user():
     user.insert()
     # make session cookie:
     cookie = make_signed_cookie(user.id, user.password, None)
-    response.set_cookie(_COOKIE_NAME, cookie)
     return user
 
 def make_signed_cookie(id, password, max_age):
@@ -76,9 +80,11 @@ def make_signed_cookie(id, password, max_age):
     return '-'.join(L)
 
 @get('/')
-@jinja2_view('home.html', template_lookup=['templates'])
+@view('home.html')
 def home():
-    return {'title': 'Hello world'}
+    cookie = request.get_cookie(_COOKIE_NAME,secret=_COOKIE_KEY)
+    user = parse_signed_cookie(cookie)
+    return dict(user=user)
 
 @get('/test_users')
 @view('test_users.html')

@@ -8,8 +8,8 @@ JSON API definition.
 '''
 
 import re, json, logging, functools
-
-from transwarp.web import ctx
+from bottle import response
+import ujson
 
 class Page(object):
     '''
@@ -57,7 +57,7 @@ class Page(object):
         self.has_previous = self.page_index > 1
 
     def __str__(self):
-        return 'item_count: %s, page_count: %s, page_index: %s, page_size: %s, offset: %s, limit: %s' % (self.item_count, self.page_count, self.page_index, self.page_size, self.offset, self.limit)
+        return '{item_count: %s, page_count: %s, page_index: %s, page_size: %s, offset: %s, limit: %s}' % (self.item_count, self.page_count, self.page_index, self.page_size, self.offset, self.limit)
 
     __repr__ = __str__
 
@@ -70,10 +70,10 @@ def _dump(obj):
             'has_next': obj.has_next,
             'has_previous': obj.has_previous
         }
-    raise TypeError('%s is not JSON serializable' % obj)
+    raise TypeError('%s is not a fucking JSON serializable' % obj)
 
 def dumps(obj):
-    return json.dumps(obj, default=_dump)
+    return ujson.dumps(obj,default=_dump)
 
 class APIError(StandardError):
     '''
@@ -120,11 +120,12 @@ def api(func):
         try:
             r = dumps(func(*args, **kw))
         except APIError, e:
-            r = json.dumps(dict(error=e.error, data=e.data, message=e.message))
+            r = ujson.dumps(dict(error=e.error, data=e.data, message=e.message))
         except Exception, e:
             logging.exception(e)
-            r = json.dumps(dict(error='internalerror', data=e.__class__.__name__, message=e.message))
-        ctx.response.content_type = 'application/json'
+            r = ujson.dumps(dict(error='internalerror', data=e.__class__.__name__, message=e.message))
+        #ctx.response.content_type = 'application/json'
+        response.content_type = 'application/json'
         return r
     return _wrapper
 
